@@ -50,7 +50,7 @@ if imgtype=='D90': basefiles = '/root/share/raw-images/'
 while (1):
 		os.system('uvccapture -m -x1280 -y720 -obobo.jpg')
 		displayimage (screen, 'bobo.jpg' , imagesz, imageloc )
-		time.sleep(.05)
+		#time.sleep(.05)
 
 		for event in pygame.event.get():
 			if event.type == QUIT or event.key == K_q or event.key == K_ESCAPE:
