@@ -13,10 +13,18 @@ def shellcmd(command):
 	print ' =>', command
 	os.system(command)
 
-
 def fillscreen(screen, color):
 	screen.fill(color)
 	pygame.display.flip()
+
+
+def center_loc(size, imagesize):
+	# screen size should always be >= imagesize, no checks here...
+	w, h = size
+	iw, ih = imagesize
+	dx = int( (w-iw)/2. )
+	dy = int( (h-ih)/2. )
+	return ( (dx, dy) )
 
 def displayimage(screen, filename, size, location=(0,0)):
 		image = pygame.image.load(filename)
