@@ -12,8 +12,8 @@ from random import randrange
 disptype = 'LVDS'
 #disptype = 'EEEpc'
 
-#imgtype = 'D90' # D90 camera image
-imgtype = 'disp' # horizontal 4-up composite image
+imgtype = 'D90' # D90 camera image
+#imgtype = 'disp' # horizontal 4-up composite image
 
 # set up display and image sizes for screen
 if disptype == 'LVDS':
@@ -34,8 +34,8 @@ screen = pygame.display.set_mode(size)
 pygame.mouse.set_visible(False)
 
 # directory to pull image files from...
-basefiles = '/root/share/for-display/'
-#basefiles = '/root/share/raw-images/'
+if imgtype=='disp': basefiles = '/root/share/for-display/'
+if imgtype=='D90': basefiles = '/root/share/raw-images/'
 
 # repeate forever, or at least until a quit event...
 while (1):
@@ -43,7 +43,7 @@ while (1):
    for i in files:
 	if i not in ['.', '..']:
 		displayimage (screen, basefiles+i, imagesz, imageloc )
-		time.sleep(2.0)
+		time.sleep(1.5)
 
 		for event in pygame.event.get():
 			if event.type == QUIT or event.key == K_q or event.key == K_ESCAPE:
