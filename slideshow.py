@@ -2,7 +2,9 @@
 # many dependencies are all brought in with this import...
 from libslideshow import *
 from random import randrange
-
+from string import split,join
+import os
+import urllib2
 
 #=============================================================================
 # ==================================  MAIN  ==================================
@@ -41,6 +43,40 @@ pygame.mouse.set_visible(False)
 # directory to pull image files from...
 if imgtype=='disp': basefiles = '/root/share/for-display/'
 if imgtype=='D90': basefiles = '/root/share/raw-images/'
+
+lastone = ''
+count = 0
+cc = []
+while(1):
+	check = urllib2.urlopen('http://10.81.17.82/~r14793/lastone.txt').read()
+	if check <> lastone:
+		lastone = check
+		print "New one!", check
+		# generate new list...
+		bb = urllib2.urlopen('http://10.81.17.82/~r14793/for-disp/').read()
+		bb = split(bb, 'href="')[2:]
+		for i in bb:
+			if i not in cc: cc.append(split(i, '">')[0])
+			if cc[-1] not in os.listdir(os.curdir):
+				print 'Grabbing file...'
+				open(cc[-1], 'wb').write(urllib2.urlopen('http://10.81.17.82/~r14793/for-disp/'+cc[-1]).read())
+			if lastone in cc[-1]:
+				print 'displaying lastone ... ', cc[-1]
+				displayimage (screen, cc[-1], imagesz, imageloc )
+				time.sleep(3)
+
+	count += 1
+	if count == len(cc): count = 0
+	print count, cc[count]
+        displayimage (screen, cc[count], imagesz, imageloc )
+
+        for event in pygame.event.get():
+                if event.type == QUIT or event.key == K_q or event.key == K_ESCAPE:
+                       sys.exit()
+	time.sleep(3)
+
+
+
 
 # repeate forever, or at least until a quit event...
 while (1):
