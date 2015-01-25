@@ -46,7 +46,6 @@ if imgtype=='D90': basefiles = '/root/share/raw-images/'
 
 lastone = ''
 count = 0
-cc = []
 while(1):
 	check = urllib2.urlopen('http://10.81.17.82/~r14793/lastone.txt').read()
 	if check <> lastone:
@@ -55,14 +54,16 @@ while(1):
 		# generate new list...
 		bb = urllib2.urlopen('http://10.81.17.82/~r14793/for-disp/').read()
 		bb = split(bb, 'href="')[2:]
+		cc = []
 		for i in bb:
-			if i not in cc: cc.append(split(i, '">')[0])
-			if cc[-1] not in os.listdir(os.curdir):
+			filename = split(i, '">')[0]
+			if filename not in cc: cc.append(filename)
+			if filename not in os.listdir(os.curdir):
 				print 'Grabbing file...'
-				open(cc[-1], 'wb').write(urllib2.urlopen('http://10.81.17.82/~r14793/for-disp/'+cc[-1]).read())
-			if lastone in cc[-1]:
-				print 'displaying lastone ... ', cc[-1]
-				displayimage (screen, cc[-1], imagesz, imageloc )
+				open(filename, 'wb').write(urllib2.urlopen('http://10.81.17.82/~r14793/for-disp/'+filename).read())
+			if lastone in filename:
+				print 'displaying lastone ... ', filename 
+				displayimage (screen, filename, imagesz, imageloc )
 				time.sleep(3)
 
 	count += 1
