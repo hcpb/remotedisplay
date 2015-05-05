@@ -77,14 +77,13 @@ while(1):
 			# add to files if it's not already in there...
 			if filename not in files: files.append(filename)
 
-			# if it's not already local, grab the image...
-			if filename not in os.listdir(os.curdir):
-				print 'Grabbing file...'
-				open(filename, 'wb').write(urllib2.urlopen(baseurl+'for-disp/'+filename).read())
-
 			# if 'i' is actually the latest, then display it right now...
 			# holding it a little longer so people can see it when they come out
 			if lastone in filename:
+				# if it's not already local, grab the image...
+				if filename not in os.listdir(os.curdir):
+					print 'Grabbing file...'
+					open(filename, 'wb').write(urllib2.urlopen(baseurl+'for-disp/'+filename).read())
 				print 'displaying lastone ... ', filename 
 				displayimage (screen, filename, imagesz, imageloc )
 				time.sleep(10)
@@ -99,6 +98,10 @@ while(1):
 
 	# Finally, display the next image in the file list...
         if count < len(files): 
+		# if it's not already local, grab the image...
+		if files[count] not in os.listdir(os.curdir):
+			print 'Grabbing file...'
+			open(files[count], 'wb').write(urllib2.urlopen(baseurl+'for-disp/'+files[count]).read())
 		displayimage (screen, files[count], imagesz, imageloc )
 		print count, files[count]
 
