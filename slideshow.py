@@ -81,14 +81,18 @@ while(1):
 		count = 0
 		print 'Shuffling file list...'
 		shuffle(files)
-	print count, files[count]
+
 	# display the next image in the file list...
-        displayimage (screen, files[count], imagesz, imageloc )
+        if count < len(files): 
+		displayimage (screen, files[count], imagesz, imageloc )
+		print count, files[count]
 
 	# check for a signal to quit...
         for event in pygame.event.get():
-                if event.type == QUIT or event.key == K_q or event.key == K_ESCAPE:
-                       sys.exit()
+                if event.type == pygame.QUIT: sys.exit()
+		if event.type == pygame.KEYDOWN: 
+			if event.key == K_q or event.key == ESCAPE: 
+				sys.exit()
 
 	# delay time for displaying the image...
 	time.sleep(3)
