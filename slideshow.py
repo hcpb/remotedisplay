@@ -13,7 +13,8 @@ import urllib2
 # indicate what display we are using (i.e., uncomment it)...
 #disptype = 'LVDS'  # FSL LVDS display 
 #disptype = 'EEEpc' # EEE PC netbook 
-disptype = 'mx28'  # i.MX28 LCD display
+#disptype = 'mx28'  # i.MX28 LCD display
+disptype = 'fullhd' #hdmi TV
 
 # define the image type so we can maximize it on the display without distorting
 #imgtype = 'D90' # D90 camera image
@@ -32,6 +33,10 @@ if disptype == 'mx28':
    size = (800, 480) 				# i.MX28 LCD screen size
    if imgtype == 'D90': imagesz = (720, 480)  	# D90 aspect ratio
    if imgtype == 'disp': imagesz = (704, 480) 	# composite aspect ratio
+if disptype == 'fullhd':
+   size = (1920, 1080)
+   if imgtype == 'D90': imagesz  = (1620, 1080)
+   if imgtype == 'disp': imagesz = (1920, 1080)
 
 # determine the offset to centered the image on the display in use...
 imageloc = center_loc(size, imagesz) 
