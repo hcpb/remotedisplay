@@ -3,7 +3,7 @@
 from libslideshow import *
 from random import randrange
 import Image, select, v4l2capture
-from time import sleep
+from time import sleep, time
 from StringIO import StringIO
 
 def startvid():			# open the video camera for use...
@@ -37,7 +37,7 @@ def grabframe_and_display(sv=False):	# grab a frame from cam and display t to sc
         pygame.display.flip()
 
 	if sv: 
-		im.save('/var/www/html/frame.jpg')
+		im.save('/var/www/html/frame'+str(time())+'.jpg')
 		print 'Saved image...'
 
 
