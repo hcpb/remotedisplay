@@ -27,7 +27,9 @@ def center_loc(size, imagesize):
 	return ( (dx, dy) )
 
 def displayimage(screen, filename, size, location=(0,0)):
-		image = pygame.image.load(filename)
+		f = open(filename, 'rb')
+		print filename
+		image = pygame.image.load(f, filename)
 		imagerect = image.get_rect()
 		image = pygame.transform.scale(image, size)
 		screen.blit(image, location)

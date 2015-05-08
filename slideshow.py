@@ -36,7 +36,7 @@ if disptype == 'mx28':
 if disptype == 'fullhd':
    size = (1920, 1080)
    if imgtype == 'D90': imagesz  = (1620, 1080)
-   if imgtype == 'disp': imagesz = (1920, 1080)
+   if imgtype == 'disp': imagesz = (1584, 1080)
 
 # determine the offset to centered the image on the display in use...
 imageloc = center_loc(size, imagesz) 
@@ -47,7 +47,7 @@ screen = pygame.display.set_mode(size)
 pygame.mouse.set_visible(False)
 
 # define the base url to the photo booth web server
-baseurl = 'http://10.81.17.82/~r14793/'
+baseurl = 'http://10.81.56.160/'
 
 lastone = '' 	# holds the newest image number from the web server: DSCxxxx 
 		# there is no extension to make things easier... 
@@ -67,7 +67,7 @@ while(1):
 		print "New one!", check
 
 		# grab the directory listing from the web server...
-		indx = urllib2.urlopen(baseurl+'for-disp/').read()
+		indx = urllib2.urlopen(baseurl+'for-display/').read()
 
 		# extract the first half image names from the html
 		# (no need for a pretty html parser...)
@@ -78,17 +78,17 @@ while(1):
 
 			# finish splitting the name
 			filename = split(i, '">')[0]
-
+			print 'filename:', filename
 			# add to files if it's not already in there...
-			if filename not in files: files.append(filename)
+			if filename not in files and 'DSC' in filename: files.append(filename)
 
 			# if 'i' is actually the latest, then display it right now...
 			# holding it a little longer so people can see it when they come out
 			if lastone in filename:
 				# if it's not already local, grab the image...
 				if filename not in os.listdir(os.curdir):
-					print 'Grabbing file...'
-					open(filename, 'wb').write(urllib2.urlopen(baseurl+'for-disp/'+filename).read())
+					print 'Grabbing file...', filename
+					open(filename, 'wb').write(urllib2.urlopen(baseurl+'for-display/'+filename).read())
 				print 'displaying lastone ... ', filename 
 				displayimage (screen, filename, imagesz, imageloc )
 				time.sleep(10)
@@ -105,8 +105,8 @@ while(1):
         if count < len(files): 
 		# if it's not already local, grab the image...
 		if files[count] not in os.listdir(os.curdir):
-			print 'Grabbing file...'
-			open(files[count], 'wb').write(urllib2.urlopen(baseurl+'for-disp/'+files[count]).read())
+			print 'Grabbing file...', filename
+			open(files[count], 'wb').write(urllib2.urlopen(baseurl+'for-display/'+files[count]).read())
 		displayimage (screen, files[count], imagesz, imageloc )
 		print count, files[count]
 
