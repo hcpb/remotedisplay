@@ -3,7 +3,7 @@
 from libslideshow import *
 from random import randrange
 import Image, select, v4l2capture
-from time import sleep
+from time import sleep, time
 from StringIO import StringIO
 
 def startvid():			# open the video camera for use...
@@ -14,7 +14,7 @@ def startvid():			# open the video camera for use...
         video.queue_all_buffers()
 	video.start()
 
-def grabframe_anddisplay():	# grab a frame from cam and display t to screen
+def grabframe_and_display(sv=False):	# grab a frame from cam and display t to screen
 	buff = StringIO()	# create StringIO buffer for stashing image data
 	#video.start()		# start the video cam
         select.select((video,), (), ())
@@ -36,14 +36,19 @@ def grabframe_anddisplay():	# grab a frame from cam and display t to screen
         screen.blit(image, loc)
         pygame.display.flip()
 
+	if sv: 
+		im.save('/var/www/html/frame'+str(time())+'.jpg')
+		print 'Saved image...'
+
 
 # ==================================  MAIN  ==================================
 #=============================================================================
 
 # indicate what display we are using...
 #disptype = 'LVDS'
-disptype = 'EEEpc'
-disptype = 'mx28'
+#disptype = 'EEEpc'
+#disptype = 'mx28'
+disptype = 'fullhd' #hdmi TV
 
 #imgtype = 'D90' # D90 camera image
 #imgtype = 'disp' # horizontal 4-up composite image
@@ -65,6 +70,12 @@ if disptype == 'mx28':
    if imgtype == 'D90': imagesz = (720, 480) # EEE pc image size, D90
    if imgtype == 'disp': imagesz = (704, 480) # EEE pc image size, composite
    if imgtype == 'hd720': imagesz = (800, 450) # LVDS image size, hd720
+if disptype == 'fullhd':
+   size = (1920, 1080)
+   if imgtype == 'D90': imagesz  = (1620, 1080)
+   if imgtype == 'disp': imagesz = (1920, 1080)
+   if imgtype == 'hd720': imagesz = (1920, 1080) 
+
 
 # determine the proper offset for a centered image, x and y...
 imageloc = center_loc(size, imagesz) 
@@ -81,10 +92,15 @@ if imgtype=='D90': basefiles = '/root/share/raw-images/'
 startvid()
 
 # repeate forever, or at least until a quit event...
+count = 0
 while (1):
-		grabframe_anddisplay()
+	count += 1
+	if count == 90:
+		count = 0
+		grabframe_and_display(sv=True)
+	else: grabframe_and_display(sv=False)
 
-		for event in pygame.event.get():
+	for event in pygame.event.get():
 			if event.type == QUIT or event.key == K_q or event.key == K_ESCAPE:
 				sys.exit()
 
