@@ -6,19 +6,32 @@ from string import split,join
 import os
 import urllib2
 
+# this allows a non-root user to run...
+os.putenv('SDL_FBDEV', '/dev/fb0')
+os.putenv('SDL_VIDEODRIVER', 'fbcon')
+os.putenv('SDL_NOMOUSE', '1')
+
+
 #=============================================================================
 # ==================================  MAIN  ==================================
 #=============================================================================
+
+config={}
+for i in open('config.txt','r').readlines():
+	temp = split(i, '=')[0:2]
+	config[temp[0]] = split(temp[1])[0]
+disptype = config['disp']
+imgtype = config['imgtype']
 
 # indicate what display we are using (i.e., uncomment it)...
 #disptype = 'LVDS'  # FSL LVDS display 
 #disptype = 'EEEpc' # EEE PC netbook 
 #disptype = 'mx28'  # i.MX28 LCD display
-disptype = 'fullhd' #hdmi TV
+#disptype = 'fullhd' #hdmi TV
 
 # define the image type so we can maximize it on the display without distorting
 #imgtype = 'D90' # D90 camera image
-imgtype = 'disp' # horizontal 4-up composite image
+#imgtype = 'disp' # horizontal 4-up composite image
 
 # set up display and image sizes for screen
 if disptype == 'LVDS':
@@ -47,7 +60,8 @@ screen = pygame.display.set_mode(size)
 pygame.mouse.set_visible(False)
 
 # define the base url to the photo booth web server
-baseurl = 'http://10.81.56.160/'
+#baseurl = 'http://10.0.2.21/pb/'
+baseurl = config['baseurl']
 
 lastone = '' 	# holds the newest image number from the web server: DSCxxxx 
 		# there is no extension to make things easier... 
