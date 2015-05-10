@@ -3,7 +3,7 @@
 from libslideshow import *
 from random import randrange, shuffle
 from string import split,join
-import os
+import os, sys
 import urllib2
 
 # this allows a non-root user to run...
@@ -70,6 +70,15 @@ files = []   	# holds list of images to display
 
 # play slideshow forever
 while(1):
+
+	# check for a command from booth central...
+	check = urllib2.urlopen(baseurl).read()
+	if 'command' in check:
+		command = urllib2.urlopen(baseurl+'command.txt').read()
+		if 'reboot' in command: shellcmd('touch ~/reboot')
+		if 'shutdown' in command: shellcmd('touch ~/shutdown')
+		if 'clearcache' in command: shellcmd('rm *.jpg')
+		if 'quit' in command: sys.exit()
 
 	# check to see if a new image is ready...
 	check = urllib2.urlopen(baseurl+'lastone.txt').read()
