@@ -16,6 +16,7 @@ os.putenv('SDL_NOMOUSE', '1')
 # ==================================  MAIN  ==================================
 #=============================================================================
 
+# read configuration from file... 
 config={}
 for i in open('config.txt','r').readlines():
 	temp = split(i, '=')[0:2]
@@ -67,6 +68,7 @@ lastone = '' 	# holds the newest image number from the web server: DSCxxxx
 		# there is no extension to make things easier... 
 count = 0    	# index variable used to stepping 'files'
 files = []   	# holds list of images to display
+lastcmd = ''	# hold last command issued by booth central
 
 # play slideshow forever
 while(1):
@@ -75,10 +77,12 @@ while(1):
 	check = urllib2.urlopen(baseurl).read()
 	if 'command' in check:
 		command = urllib2.urlopen(baseurl+'command.txt').read()
-		if 'reboot' in command: shellcmd('touch ~/reboot')
-		if 'shutdown' in command: shellcmd('touch ~/shutdown')
-		if 'clearcache' in command: shellcmd('rm *.jpg')
-		if 'quit' in command: sys.exit()
+		if command <> lastcmd:
+			lastcmd = command
+			if 'reboot' in command: shellcmd('touch ~/reboot')
+			if 'shutdown' in command: shellcmd('touch ~/shutdown')
+			if 'clearcache' in command: shellcmd('rm *.jpg')
+			if 'quit' in command: sys.exit()
 
 	# check to see if a new image is ready...
 	check = urllib2.urlopen(baseurl+'lastone.txt').read()
