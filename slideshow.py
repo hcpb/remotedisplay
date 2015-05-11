@@ -18,7 +18,7 @@ os.putenv('SDL_NOMOUSE', '1')
 
 # read configuration from file... 
 config={}
-for i in open('config.txt','r').readlines():
+for i in open('/home/debian/remotedisplay/config.txt','r').readlines():
 	temp = split(i, '=')[0:2]
 	config[temp[0]] = split(temp[1])[0]
 disptype = config['disp']
